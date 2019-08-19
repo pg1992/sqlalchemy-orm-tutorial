@@ -8,7 +8,7 @@ def sqlalchemy_version():
 def create_engine():
     eng = sql.create_engine('sqlite:///:memory:', echo=True)
 
-    print(eng)
+    print('Return value of sqlalchemy.create_engine():', eng)
 
     return eng
 
