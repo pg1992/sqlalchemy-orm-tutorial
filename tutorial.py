@@ -6,7 +6,7 @@ def sqlalchemy_version():
 
 
 def create_engine():
-    eng = sql.create_engine('sqlite:///:memory:', echo=True)
+    eng = sql.create_engine('mysql+mysqldb://pedro:pedro@localhost/test', echo=True)
 
     print('Return value of sqlalchemy.create_engine():', eng)
 
