@@ -115,6 +115,10 @@ def main():
             .all()
         print('After rollback:', after_rollback)
 
+        # Query a list of all users ordered by ID
+        for instance in session.query(User).order_by(User.id):
+            print(instance)
+
 
 if __name__ == '__main__':
     main()
