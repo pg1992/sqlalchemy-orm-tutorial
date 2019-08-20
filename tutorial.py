@@ -23,7 +23,7 @@ def sqlalchemy_version():
     print('SQLAlchemy version: {}'.format(sql.__version__))
 
 
-def create_engine():
+def create_mysql_engine():
     eng = sql.create_engine(
         'mysql+mysqldb://pedro:pedro@localhost/test',
         echo=True,
@@ -34,9 +34,19 @@ def create_engine():
     return eng
 
 
+def create_sqlite_engine():
+    eng = sql.create_engine(
+        'sqlite:///:memory:',
+        echo=True,
+    )
+
+    print('Return value of sqlalchemy.create_engin():', eng)
+
+    return eng
+
+
 def main():
     sqlalchemy_version()
-    eng = create_engine()
 
     print(repr(User.__table__))
 
