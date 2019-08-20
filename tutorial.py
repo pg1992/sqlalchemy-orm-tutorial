@@ -62,6 +62,25 @@ def main():
         # Is the created and queried objects the same?
         print('ed_user is our_user =', ed_user is our_user)
 
+        # Add more users with add_all
+        session_instance.add_all([
+            User(name='wendy', fullname='Wendy Williams', nickname='windy'),
+            User(name='mary', fullname='Mary Contrary', nickname='mary'),
+            User(name='fred', fullname='Fred Flintstone', nickname='freddy'),
+        ])
+
+        # Change Ed's nickname
+        ed_user.nickname = 'eddie'
+
+        # Is there some operation pending?
+        print('session_instance.dirty =', session_instance.dirty)
+
+        # Are there new objects to be persisted?
+        print('session_instance.new =', session_instance.new)
+
+        # Commit the transaction
+        session_instance.commit()
+
 
 if __name__ == '__main__':
     main()
