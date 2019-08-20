@@ -48,7 +48,11 @@ def create_sqlite_engine():
 def main():
     sqlalchemy_version()
 
-    print(repr(User.__table__))
+    mysql_engine = create_mysql_engine()
+    Base.metadata.create_all(mysql_engine)
+
+    sqlite_engine = create_sqlite_engine()
+    Base.metadata.create_all(sqlite_engine)
 
 
 if __name__ == '__main__':
