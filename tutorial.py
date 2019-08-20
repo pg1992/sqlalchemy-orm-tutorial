@@ -127,6 +127,10 @@ def main():
         for row in session.query(User, User.name).all():
             print('User: {}, name: {}'.format(row.User, row.name))
 
+        # Rename a column
+        for row in session.query(User.name.label('name_label')):
+            print('row.name_label =', row.name_label)
+
 
 if __name__ == '__main__':
     main()
