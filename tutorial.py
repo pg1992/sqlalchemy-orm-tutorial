@@ -141,6 +141,10 @@ def main():
         for u in session.query(User).order_by(User.id)[1:3]:
             print('user =', u)
 
+        # Use filter_by to implement SQL WHERE
+        for name, in session.query(User.name).filter_by(fullname='Ed Jones'):
+            print(name)
+
 
 if __name__ == '__main__':
     main()
