@@ -8,7 +8,7 @@ Base = declarative_base()
 class User(Base):
     __tablename__ = 'user'
 
-    id = sql.Column(sql.Integer, primary_key=True)
+    id = sql.Column(sql.Integer, sql.Sequence('user_id_seq'), primary_key=True)
     name = sql.Column(sql.String(50))
     fullname = sql.Column(sql.String(50))
     nickname = sql.Column(sql.String(50))
