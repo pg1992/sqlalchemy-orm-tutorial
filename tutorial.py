@@ -123,6 +123,10 @@ def main():
         for name, fullname in session.query(User.name, User.fullname):
             print('user.name = {}, user.fullname = {}'.format(name, fullname))
 
+        # Return KeyedTuple
+        for row in session.query(User, User.name).all():
+            print('User: {}, name: {}'.format(row.User, row.name))
+
 
 if __name__ == '__main__':
     main()
