@@ -85,6 +85,36 @@ def main():
         # Print ed_user showing that now it has an id
         print('ed_user =', ed_user)
 
+        # Change the user name
+        ed_user.name = 'Edwardo'
+
+        # Add a an erroneous user
+        fake_user = User(name='fakeuser', fullname='Invalid', nickname='12345')
+        session_instance.add(fake_user)
+
+        # Query the recent added data in the current session
+        wrong_users = session_instance\
+            .query(User)\
+            .filter(User.name.in_(['Edwardo', 'fakeuser']))\
+            .all()
+        print('Before rollback:', wrong_users)
+
+        # Oops! Invalid transaction. Rollback!
+        session_instance.rollback()
+
+        # Print Ed's name
+        print('ed_user.name =', ed_user.name)
+
+        # Is the fake_user on this session?
+        print('fake_user in session?', fake_user in session_instance)
+
+        # Query the recent added data in the current session after rollback
+        after_rollback = session_instance\
+            .query(User)\
+            .filter(User.name.in_(['ed', 'fakeuser']))\
+            .all()
+        print('After rollback:', after_rollback)
+
 
 if __name__ == '__main__':
     main()
