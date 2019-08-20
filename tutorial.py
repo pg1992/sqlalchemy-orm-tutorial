@@ -25,16 +25,16 @@ def create_engines_and_sessions():
         'mysql+mysqldb://pedro:pedro@localhost/test',
     ]
 
-    sessions_engines = []
+    engines_sessions = []
 
     for conn_string in conn_strings:
         engine = sql.create_engine(conn_string, echo=True)
-        session = sql.orm.sessionmaker(bind=engine)
-        sessions_engines.append((engine, session))
+        session_class = sql.orm.sessionmaker(bind=engine)
+        engines_sessions.append((engine, session_class))
 
         print('Return value of sqlalchemy.create_engine():', engine)
 
-    return sessions_engines
+    return engines_sessions
 
 
 def main():
@@ -42,19 +42,19 @@ def main():
     print('SQLAlchemy version: {}'.format(sql.__version__))
 
     # Create all engines, session makers, schemas, and a sessions
-    for engine, session in create_engines_and_sessions():
+    for engine, session_class in create_engines_and_sessions():
         Base.metadata.create_all(engine)
-        session_instance = session()
+        session = session_class()
 
         # Create an instance of the mapped class
         ed_user = User(name='ed', fullname='Ed Jones', nickname='edsnickname')
         print('ed_user =', ed_user)
 
         # Create a pending instance
-        session_instance.add(ed_user)
+        session.add(ed_user)
 
         # Query our user will flush the instance and issue SQL
-        our_user = session_instance.query(User).filter_by(name='ed').first()
+        our_user = session.query(User).filter_by(name='ed').first()
 
         # Print each object property
         print('ed_user =', ed_user)
@@ -64,7 +64,7 @@ def main():
         print('ed_user is our_user =', ed_user is our_user)
 
         # Add more users with add_all
-        session_instance.add_all([
+        session.add_all([
             User(name='wendy', fullname='Wendy Williams', nickname='windy'),
             User(name='mary', fullname='Mary Contrary', nickname='mary'),
             User(name='fred', fullname='Fred Flintstone', nickname='freddy'),
@@ -74,13 +74,13 @@ def main():
         ed_user.nickname = 'eddie'
 
         # Is there some operation pending?
-        print('session_instance.dirty =', session_instance.dirty)
+        print('session.dirty =', session.dirty)
 
         # Are there new objects to be persisted?
-        print('session_instance.new =', session_instance.new)
+        print('session.new =', session.new)
 
         # Commit the transaction
-        session_instance.commit()
+        session.commit()
 
         # Print ed_user showing that now it has an id
         print('ed_user =', ed_user)
@@ -90,26 +90,26 @@ def main():
 
         # Add a an erroneous user
         fake_user = User(name='fakeuser', fullname='Invalid', nickname='12345')
-        session_instance.add(fake_user)
+        session.add(fake_user)
 
         # Query the recent added data in the current session
-        wrong_users = session_instance\
+        wrong_users = session\
             .query(User)\
             .filter(User.name.in_(['Edwardo', 'fakeuser']))\
             .all()
         print('Before rollback:', wrong_users)
 
         # Oops! Invalid transaction. Rollback!
-        session_instance.rollback()
+        session.rollback()
 
         # Print Ed's name
         print('ed_user.name =', ed_user.name)
 
         # Is the fake_user on this session?
-        print('fake_user in session?', fake_user in session_instance)
+        print('fake_user in session?', fake_user in session)
 
         # Query the recent added data in the current session after rollback
-        after_rollback = session_instance\
+        after_rollback = session\
             .query(User)\
             .filter(User.name.in_(['ed', 'fakeuser']))\
             .all()
