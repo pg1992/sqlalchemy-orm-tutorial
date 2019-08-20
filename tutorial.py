@@ -1,6 +1,5 @@
 import sqlalchemy as sql
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
 
 
 Base = declarative_base()
@@ -29,11 +28,8 @@ def create_engines_and_sessions():
     sessions_engines = []
 
     for conn_string in conn_strings:
-        engine = sql.create_engine(
-            conn_string,
-            echo=True,
-        )
-        session = sessionmaker(bind=engine)
+        engine = sql.create_engine(conn_string, echo=True)
+        session = sql.orm.sessionmaker(bind=engine)
         sessions_engines.append((engine, session))
 
         print('Return value of sqlalchemy.create_engine():', engine)
