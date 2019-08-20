@@ -21,8 +21,8 @@ class User(Base):
 
 def create_engines_and_sessions():
     conn_strings = [
-        'mysql+mysqldb://pedro:pedro@localhost/test',
         'sqlite:///:memory:',
+        'mysql+mysqldb://pedro:pedro@localhost/test',
     ]
 
     sessions_engines = []
@@ -48,6 +48,7 @@ def main():
 
         # Create an instance of the mapped class
         ed_user = User(name='ed', fullname='Ed Jones', nickname='edsnickname')
+        print('ed_user =', ed_user)
 
         # Create a pending instance
         session_instance.add(ed_user)
@@ -80,6 +81,9 @@ def main():
 
         # Commit the transaction
         session_instance.commit()
+
+        # Print ed_user showing that now it has an id
+        print('ed_user =', ed_user)
 
 
 if __name__ == '__main__':
