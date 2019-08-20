@@ -57,6 +57,13 @@ def main():
     sqlite_engine = create_sqlite_engine()
     Base.metadata.create_all(sqlite_engine)
 
+    # Create an instance of the mapped class
+    ed_user = User(name='ed', fullname='Ed Jones', nickname='edsnickname')
+    print('ed_user.name =', ed_user.name)
+    print('ed_user.fullname =', ed_user.fullname)
+    print('ed_user.nickname =', ed_user.nickname)
+    print('ed_user.id =', str(ed_user.id))
+
 
 if __name__ == '__main__':
     main()
