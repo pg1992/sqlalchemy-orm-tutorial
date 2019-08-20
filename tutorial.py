@@ -49,6 +49,7 @@ def main():
         # Create an instance of the mapped class
         ed_user = User(name='ed', fullname='Ed Jones', nickname='edsnickname')
         print('ed_user =', ed_user)
+        session_instance.add(ed_user)
 
 
 if __name__ == '__main__':
