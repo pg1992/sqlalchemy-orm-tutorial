@@ -4,8 +4,6 @@ from sqlalchemy.orm import sessionmaker
 
 
 Base = declarative_base()
-MySQLSession = sessionmaker()
-SQLiteSession = sessionmaker()
 
 
 class User(Base):
@@ -17,61 +15,43 @@ class User(Base):
     nickname = sql.Column(sql.String(50))
 
     def __repr__(self):
-        return "<User(name='{}', fullname='{}', nickname='{}')>".format(
-            self.name, self.fullname, self.nickname
+        return "<User(id='%s', name='%s', fullname='%s', nickname='%s')>" % (
+            self.id, self.name, self.fullname, self.nickname,
         )
 
 
-def sqlalchemy_version():
-    print('SQLAlchemy version: {}'.format(sql.__version__))
-
-
-def create_mysql_engine():
-    eng = sql.create_engine(
+def create_engines_and_sessions():
+    conn_strings = [
         'mysql+mysqldb://pedro:pedro@localhost/test',
-        echo=True,
-    )
-
-    print('Return value of sqlalchemy.create_engine():', eng)
-
-    MySQLSession.configure(bind=eng)
-
-    return eng
-
-
-def create_sqlite_engine():
-    eng = sql.create_engine(
         'sqlite:///:memory:',
-        echo=True,
-    )
+    ]
 
-    print('Return value of sqlalchemy.create_engin():', eng)
+    sessions_engines = []
 
-    SQLiteSession.configure(bind=eng)
+    for conn_string in conn_strings:
+        engine = sql.create_engine(
+            conn_string,
+            echo=True,
+        )
+        session = sessionmaker(bind=engine)
+        sessions_engines.append((engine, session))
 
-    return eng
+        print('Return value of sqlalchemy.create_engine():', engine)
+
+    return sessions_engines
 
 
 def main():
     # Check SQLAlchemy version
-    sqlalchemy_version()
+    print('SQLAlchemy version: {}'.format(sql.__version__))
 
-    # Create a MySQL engine with msqlclient and create a schema
-    mysql_engine = create_mysql_engine()
-    Base.metadata.create_all(mysql_engine)
-    mysql_session = MySQLSession()
+    # Create all engines, session makers, schemas, and a sessions
+    for engine, session in create_engines_and_sessions():
+        Base.metadata.create_all(engine)
 
-    # Create a SQLite engine in memory and create a schema
-    sqlite_engine = create_sqlite_engine()
-    Base.metadata.create_all(sqlite_engine)
-    sqlite_session = SQLiteSession()
-
-    # Create an instance of the mapped class
-    ed_user = User(name='ed', fullname='Ed Jones', nickname='edsnickname')
-    print('ed_user.name =', ed_user.name)
-    print('ed_user.fullname =', ed_user.fullname)
-    print('ed_user.nickname =', ed_user.nickname)
-    print('ed_user.id =', str(ed_user.id))
+        # Create an instance of the mapped class
+        ed_user = User(name='ed', fullname='Ed Jones', nickname='edsnickname')
+        print('ed_user =', ed_user)
 
 
 if __name__ == '__main__':
