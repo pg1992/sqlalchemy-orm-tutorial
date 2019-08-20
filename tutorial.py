@@ -73,6 +73,44 @@ def common_filter_operators(session):
             print('An error occured:', ex)
 
 
+def lists_and_scalars(session):
+    query = session.query(User)\
+                   .filter(User.name.like('%ed%'))\
+                   .order_by(User.id)
+
+    print('query.all() =', query.all())
+    print('query.first() =', query.first())
+
+    try:
+        print('query.one() =', query.one())
+    except Exception as ex:
+        print('Error:', ex)
+
+    try:
+        bogus_query = query.filter(User.id == 99)
+        print('query.one() =', bogus_query.one())
+    except Exception as ex:
+        print('Error:', ex)
+
+    try:
+        print('query.one_or_none() =', query.one_or_none())
+    except Exception as ex:
+        print('Error:', ex)
+
+    try:
+        bogus_query = query.filter(User.id == 99)
+        print('query.one_or_none() =', bogus_query.one_or_none())
+    except Exception as ex:
+        print('Error:', ex)
+
+    try:
+        query = session.query(User.id).filter(User.name == 'ed')\
+                       .order_by(User.id)
+        print('query.scalar() =', query.scalar())
+    except Exception as ex:
+        print('Error:', ex)
+
+
 def main():
     # Check SQLAlchemy version
     print('SQLAlchemy version: {}'.format(sql.__version__))
@@ -195,6 +233,9 @@ def main():
         # Common filter operators
         common_filter_operators(session)
 
+
+        # Returning lists or scalars
+        lists_and_scalars(session)
 
 if __name__ == '__main__':
     main()
