@@ -46,11 +46,14 @@ def create_sqlite_engine():
 
 
 def main():
+    # Check SQLAlchemy version
     sqlalchemy_version()
 
+    # Create a MySQL engine with msqlclient and create a schema
     mysql_engine = create_mysql_engine()
     Base.metadata.create_all(mysql_engine)
 
+    # Create a SQLite engine in memory and create a schema
     sqlite_engine = create_sqlite_engine()
     Base.metadata.create_all(sqlite_engine)
 
