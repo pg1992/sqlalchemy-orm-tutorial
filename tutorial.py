@@ -44,6 +44,7 @@ def main():
     # Create all engines, session makers, schemas, and a sessions
     for engine, session in create_engines_and_sessions():
         Base.metadata.create_all(engine)
+        session_instance = session()
 
         # Create an instance of the mapped class
         ed_user = User(name='ed', fullname='Ed Jones', nickname='edsnickname')
