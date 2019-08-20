@@ -48,8 +48,19 @@ def main():
 
         # Create an instance of the mapped class
         ed_user = User(name='ed', fullname='Ed Jones', nickname='edsnickname')
-        print('ed_user =', ed_user)
+
+        # Create a pending instance
         session_instance.add(ed_user)
+
+        # Query our user will flush the instance and issue SQL
+        our_user = session_instance.query(User).filter_by(name='ed').first()
+
+        # Print each object property
+        print('ed_user =', ed_user)
+        print('our_user =', our_user)
+
+        # Is the created and queried objects the same?
+        print('ed_user is our_user =', ed_user is our_user)
 
 
 if __name__ == '__main__':
