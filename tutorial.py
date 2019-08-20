@@ -143,7 +143,18 @@ def main():
 
         # Use filter_by to implement SQL WHERE
         for name, in session.query(User.name).filter_by(fullname='Ed Jones'):
-            print(name)
+            print('name =', name)
+
+        # Use filter for a more flexible SQL expression
+        for name, in session.query(User.name)\
+                .filter(User.fullname == 'Ed Jones'):
+            print('name =', name)
+
+        # Join criteria with AND
+        for user in session.query(User)\
+                .filter(User.name == 'ed')\
+                .filter(User.fullname == 'Ed Jones'):
+            print('user =', user)
 
 
 if __name__ == '__main__':
