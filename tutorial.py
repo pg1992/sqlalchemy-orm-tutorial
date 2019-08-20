@@ -1,8 +1,11 @@
 import sqlalchemy as sql
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 
 
 Base = declarative_base()
+MySQLSession = sessionmaker()
+SQLiteSession = sessionmaker()
 
 
 class User(Base):
@@ -31,6 +34,8 @@ def create_mysql_engine():
 
     print('Return value of sqlalchemy.create_engine():', eng)
 
+    MySQLSession.configure(bind=eng)
+
     return eng
 
 
@@ -42,6 +47,8 @@ def create_sqlite_engine():
 
     print('Return value of sqlalchemy.create_engin():', eng)
 
+    SQLiteSession.configure(bind=eng)
+
     return eng
 
 
@@ -52,10 +59,12 @@ def main():
     # Create a MySQL engine with msqlclient and create a schema
     mysql_engine = create_mysql_engine()
     Base.metadata.create_all(mysql_engine)
+    mysql_session = MySQLSession()
 
     # Create a SQLite engine in memory and create a schema
     sqlite_engine = create_sqlite_engine()
     Base.metadata.create_all(sqlite_engine)
+    sqlite_session = SQLiteSession()
 
     # Create an instance of the mapped class
     ed_user = User(name='ed', fullname='Ed Jones', nickname='edsnickname')
