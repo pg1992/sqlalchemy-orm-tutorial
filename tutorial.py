@@ -131,6 +131,12 @@ def main():
         for row in session.query(User.name.label('name_label')):
             print('row.name_label =', row.name_label)
 
+        # Control name of the full User entity with aliased
+        user_alias = sql.orm.aliased(User, name='user_alias')
+
+        for row in session.query(user_alias, user_alias.name).all():
+            print('row.user_alias =', row.user_alias)
+
 
 if __name__ == '__main__':
     main()
