@@ -137,6 +137,10 @@ def main():
         for row in session.query(user_alias, user_alias.name).all():
             print('row.user_alias =', row.user_alias)
 
+        # Use Python array slices to implement SQL LIMIT and OFFSET
+        for u in session.query(User).order_by(User.id)[1:3]:
+            print('user =', u)
+
 
 if __name__ == '__main__':
     main()
