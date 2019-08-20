@@ -119,6 +119,10 @@ def main():
         for instance in session.query(User).order_by(User.id):
             print(instance)
 
+        # Query by ORM-instrumented descriptiors
+        for name, fullname in session.query(User.name, User.fullname):
+            print('user.name = {}, user.fullname = {}'.format(name, fullname))
+
 
 if __name__ == '__main__':
     main()
