@@ -37,6 +37,42 @@ def create_engines_and_sessions():
     return engines_sessions
 
 
+def common_filter_operators(session):
+    operators = {
+        'equals': session.query(User).filter(User.name == 'ed'),
+        'not equals': session.query(User).filter(User.name != 'ed'),
+        'LIKE': session.query(User).filter(User.name.like('%ed%')),
+        'ILIKE': session.query(User).filter(User.name.ilike('%ed%')),
+        'IN': session.query(User).filter(
+            User.name.in_(['ed', 'wendy', 'jack'])
+        ),
+        'NOT IN': session.query(User).filter(
+            ~User.name.in_(['ed', 'wendy', 'jack'])
+        ),
+        'IS NULL': session.query(User).filter(User.name.is_(None)),
+        'IS NOT NULL': session.query(User).filter(User.name.isnot(None)),
+        'AND with and_': session.query(User).filter(
+            sql.and_(User.name == 'ed', User.fullname == 'Ed Jones')
+        ),
+        'AND with multiple expressions': session.query(User).filter(
+            User.name == 'ed', User.fullname == 'Ed Jones',
+        ),
+        'AND with chained filter': session.query(User)
+                                          .filter(User.name == 'ed')
+                                          .filter(User.fullname == 'Ed Jones'),
+        'OR': session.query(User).filter(
+            sql.or_(User.name == 'ed', User.name == 'wendy')
+        ),
+        'MATCH': session.query(User).filter(User.name.match('wendy')),
+    }
+
+    for text, query in operators.items():
+        try:
+            print('{} -> {}'.format(text, query.all()))
+        except Exception as ex:
+            print('An error occured:', ex)
+
+
 def main():
     # Check SQLAlchemy version
     print('SQLAlchemy version: {}'.format(sql.__version__))
@@ -155,6 +191,9 @@ def main():
                 .filter(User.name == 'ed')\
                 .filter(User.fullname == 'Ed Jones'):
             print('user =', user)
+
+        # Common filter operators
+        common_filter_operators(session)
 
 
 if __name__ == '__main__':
