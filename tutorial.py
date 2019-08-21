@@ -22,7 +22,7 @@ class User(Base):
 def create_engines_and_sessions():
     conn_strings = [
         'sqlite:///:memory:',
-        'mysql+mysqldb://pedro:pedro@localhost/test',
+        # 'mysql+mysqldb://pedro:pedro@localhost/test',
     ]
 
     engines_sessions = []
