@@ -28,7 +28,7 @@ def create_engines_and_sessions():
     engines_sessions = []
 
     for conn_string in conn_strings:
-        engine = sql.create_engine(conn_string, echo=True)
+        engine = sql.create_engine(conn_string, echo=False)
         session_class = sql.orm.sessionmaker(bind=engine)
         engines_sessions.append((engine, session_class))
 
@@ -111,6 +111,49 @@ def lists_and_scalars(session):
         print('Error:', ex)
 
 
+def query_examples(session):
+    # Query a list of all users ordered by ID
+    for instance in session.query(User).order_by(User.id):
+        print(instance)
+
+    # Query by ORM-instrumented descriptiors
+    for name, fullname in session.query(User.name, User.fullname):
+        print('user.name = {}, user.fullname = {}'.format(name, fullname))
+
+    # Return KeyedTuple
+    for row in session.query(User, User.name).all():
+        print('User: {}, name: {}'.format(row.User, row.name))
+
+    # Rename a column
+    for row in session.query(User.name.label('name_label')):
+        print('row.name_label =', row.name_label)
+
+    # Control name of the full User entity with aliased
+    user_alias = sql.orm.aliased(User, name='user_alias')
+
+    for row in session.query(user_alias, user_alias.name).all():
+        print('row.user_alias =', row.user_alias)
+
+    # Use Python array slices to implement SQL LIMIT and OFFSET
+    for u in session.query(User).order_by(User.id)[1:3]:
+        print('user =', u)
+
+    # Use filter_by to implement SQL WHERE
+    for name, in session.query(User.name).filter_by(fullname='Ed Jones'):
+        print('name =', name)
+
+    # Use filter for a more flexible SQL expression
+    for name, in session.query(User.name)\
+            .filter(User.fullname == 'Ed Jones'):
+        print('name =', name)
+
+    # Join criteria with AND
+    for user in session.query(User)\
+            .filter(User.name == 'ed')\
+            .filter(User.fullname == 'Ed Jones'):
+        print('user =', user)
+
+
 def main():
     # Check SQLAlchemy version
     print('SQLAlchemy version: {}'.format(sql.__version__))
@@ -189,53 +232,12 @@ def main():
             .all()
         print('After rollback:', after_rollback)
 
-        # Query a list of all users ordered by ID
-        for instance in session.query(User).order_by(User.id):
-            print(instance)
-
-        # Query by ORM-instrumented descriptiors
-        for name, fullname in session.query(User.name, User.fullname):
-            print('user.name = {}, user.fullname = {}'.format(name, fullname))
-
-        # Return KeyedTuple
-        for row in session.query(User, User.name).all():
-            print('User: {}, name: {}'.format(row.User, row.name))
-
-        # Rename a column
-        for row in session.query(User.name.label('name_label')):
-            print('row.name_label =', row.name_label)
-
-        # Control name of the full User entity with aliased
-        user_alias = sql.orm.aliased(User, name='user_alias')
-
-        for row in session.query(user_alias, user_alias.name).all():
-            print('row.user_alias =', row.user_alias)
-
-        # Use Python array slices to implement SQL LIMIT and OFFSET
-        for u in session.query(User).order_by(User.id)[1:3]:
-            print('user =', u)
-
-        # Use filter_by to implement SQL WHERE
-        for name, in session.query(User.name).filter_by(fullname='Ed Jones'):
-            print('name =', name)
-
-        # Use filter for a more flexible SQL expression
-        for name, in session.query(User.name)\
-                .filter(User.fullname == 'Ed Jones'):
-            print('name =', name)
-
-        # Join criteria with AND
-        for user in session.query(User)\
-                .filter(User.name == 'ed')\
-                .filter(User.fullname == 'Ed Jones'):
-            print('user =', user)
-
         # Common filter operators
         common_filter_operators(session)
 
-
         # Returning lists or scalars
         lists_and_scalars(session)
+
 
 if __name__ == '__main__':
     main()
