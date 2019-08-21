@@ -200,6 +200,13 @@ def counting_examples(session):
     total = session.query(User).filter(User.name.like('%ed%')).count()
     print('Total of %ed% =', total)
 
+    # Count each distinct user name using sqlalchemy.func.count
+    from sqlalchemy import func
+    for total, name in session.query(func.count(User.name), User.name)\
+                              .group_by(User.name)\
+                              .all():
+        print('{} users named {}'.format(total, name))
+
 
 def main():
     # Check SQLAlchemy version
