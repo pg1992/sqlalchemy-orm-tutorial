@@ -207,6 +207,10 @@ def counting_examples(session):
                               .all():
         print('{} users named {}'.format(total, name))
 
+    # Achieve simple SELECT count(*) FROM table
+    total = session.query(func.count('*')).select_from(User).scalar()
+    print('There are {} users'.format(total))
+
 
 def main():
     # Check SQLAlchemy version
