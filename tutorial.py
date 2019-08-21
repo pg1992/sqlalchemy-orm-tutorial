@@ -169,6 +169,15 @@ def using_textual_sql(session):
                   .one()
     print('user =', user)
 
+    # Use an entirely string-based statement
+    users = session.query(User)\
+                   .from_statement(
+                        sql.text("SELECT * FROM user WHERE name=:name")
+                    )\
+                   .params(name='ed')\
+                   .all()
+    print('users =', users)
+
 
 def main():
     # Check SQLAlchemy version
