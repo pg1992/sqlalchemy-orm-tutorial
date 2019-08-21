@@ -178,6 +178,13 @@ def using_textual_sql(session):
                    .all()
     print('users =', users)
 
+    # Link textual SQL to ORM-mapped column expressions
+    stmt = sql.text("SELECT name, id, fullname, nickname "
+                    "FROM user WHERE name=:name")
+    stmt = stmt.columns(User.name, User.id, User.fullname, User.nickname)
+    users = session.query(User).from_statement(stmt).params(name='ed').all()
+    print('users =', users)
+
 
 def main():
     # Check SQLAlchemy version
