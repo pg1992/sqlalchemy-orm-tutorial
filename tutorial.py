@@ -201,18 +201,17 @@ def counting_examples(session):
     print('Total of %ed% =', total)
 
     # Count each distinct user name using sqlalchemy.func.count
-    from sqlalchemy import func
-    for total, name in session.query(func.count(User.name), User.name)\
+    for total, name in session.query(sql.func.count(User.name), User.name)\
                               .group_by(User.name)\
                               .all():
         print('{} users named {}'.format(total, name))
 
     # Achieve simple SELECT count(*) FROM table
-    total = session.query(func.count('*')).select_from(User).scalar()
+    total = session.query(sql.func.count('*')).select_from(User).scalar()
     print('There are {} users'.format(total))
 
     # If we don't want to use select_from
-    total = session.query(func.count(User.id)).scalar()
+    total = session.query(sql.func.count(User.id)).scalar()
     print('There are {} users'.format(total))
 
 
