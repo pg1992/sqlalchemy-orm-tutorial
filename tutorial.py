@@ -195,6 +195,12 @@ def using_textual_sql(session):
     print('users = ', users)
 
 
+def counting_examples(session):
+    # Count all users with name like %ed%
+    total = session.query(User).filter(User.name.like('%ed%')).count()
+    print('Total of %ed% =', total)
+
+
 def main():
     # Check SQLAlchemy version
     print('SQLAlchemy version: {}'.format(sql.__version__))
@@ -281,6 +287,9 @@ def main():
 
         # Using textual SQL
         using_textual_sql(session)
+
+        # Counting examples
+        counting_examples(session)
 
 
 if __name__ == '__main__':
