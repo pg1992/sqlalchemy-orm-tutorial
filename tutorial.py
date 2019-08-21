@@ -161,6 +161,14 @@ def using_textual_sql(session):
                        .order_by(sql.text('id')).all():
         print('user.name =', user.name)
 
+    # Bind parameters
+    user = session.query(User)\
+                  .filter(sql.text("id<:value and name=:name"))\
+                  .params(value=224, name='fred')\
+                  .order_by(User.id)\
+                  .one()
+    print('user =', user)
+
 
 def main():
     # Check SQLAlchemy version
