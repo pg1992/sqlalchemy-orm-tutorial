@@ -185,6 +185,15 @@ def using_textual_sql(session):
     users = session.query(User).from_statement(stmt).params(name='ed').all()
     print('users =', users)
 
+    # Specify the columns from query
+    stmt = sql.text("SELECT name, id FROM user WHERE name=:name")
+    stmt = stmt.columns(User.name, User.id)
+    users = session.query(User.id, User.name)\
+                   .from_statement(stmt)\
+                   .params(name='ed')\
+                   .all()
+    print('users = ', users)
+
 
 def main():
     # Check SQLAlchemy version
