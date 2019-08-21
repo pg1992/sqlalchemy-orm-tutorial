@@ -211,6 +211,10 @@ def counting_examples(session):
     total = session.query(func.count('*')).select_from(User).scalar()
     print('There are {} users'.format(total))
 
+    # If we don't want to use select_from
+    total = session.query(func.count(User.id)).scalar()
+    print('There are {} users'.format(total))
+
 
 def main():
     # Check SQLAlchemy version
