@@ -154,6 +154,14 @@ def query_examples(session):
         print('user =', user)
 
 
+def using_textual_sql(session):
+    # Use literal strings with sqlalchemy.text
+    for user in session.query(User)\
+                       .filter(sql.text('id<224'))\
+                       .order_by(sql.text('id')).all():
+        print('user.name =', user.name)
+
+
 def main():
     # Check SQLAlchemy version
     print('SQLAlchemy version: {}'.format(sql.__version__))
@@ -237,6 +245,9 @@ def main():
 
         # Returning lists or scalars
         lists_and_scalars(session)
+
+        # Using textual SQL
+        using_textual_sql(session)
 
 
 if __name__ == '__main__':
