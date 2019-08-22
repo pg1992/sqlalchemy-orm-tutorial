@@ -41,7 +41,7 @@ def create_engines_and_sessions():
     engines_sessions = []
 
     for conn_string in conn_strings:
-        engine = sql.create_engine(conn_string, echo=False)
+        engine = sql.create_engine(conn_string, echo=True)
         session_class = sql.orm.sessionmaker(bind=engine)
         engines_sessions.append((engine, session_class))
 
