@@ -236,6 +236,15 @@ def working_with_related_objects(session):
     jack = User(name='jack', fullname='Jack Bean', nickname='gjffdd')
     print('jack.addresses =', jack.addresses)
 
+    # Add addresses to a user
+    jack.addresses = [
+        Address(email_address='jack@google.com'),
+        Address(email_address='j25@yahoo.com'),
+    ]
+    print('jack.addresses[1] =', jack.addresses[1])
+    print('jack.addresses[1].user =', jack.addresses[1].user)
+    print('jack.addresses[1].user is jack? ', jack.addresses[1].user is jack)
+
 
 def main():
     # Check SQLAlchemy version
