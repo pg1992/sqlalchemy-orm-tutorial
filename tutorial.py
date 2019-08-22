@@ -6,16 +6,16 @@ Base = declarative_base()
 
 
 class User(Base):
-    __tablename__ = 'user'
+    __tablename__ = 'users'
 
-    id = sql.Column(sql.Integer, sql.Sequence('user_id_seq'), primary_key=True)
-    name = sql.Column(sql.String(50))
-    fullname = sql.Column(sql.String(50))
-    nickname = sql.Column(sql.String(50))
+    id = sql.Column(sql.Integer, primary_key=True)
+    name = sql.Column(sql.String)
+    fullname = sql.Column(sql.String)
+    nickname = sql.Column(sql.String)
 
     def __repr__(self):
-        return "<User(id='%s', name='%s', fullname='%s', nickname='%s')>" % (
-            self.id, self.name, self.fullname, self.nickname,
+        return "<User(name='%s', fullname='%s', nickname='%s')>" % (
+            self.name, self.fullname, self.nickname,
         )
 
 
@@ -172,7 +172,7 @@ def using_textual_sql(session):
     # Use an entirely string-based statement
     users = session.query(User)\
                    .from_statement(
-                        sql.text("SELECT * FROM user WHERE name=:name")
+                        sql.text("SELECT * FROM users WHERE name=:name")
                     )\
                    .params(name='ed')\
                    .all()
@@ -180,13 +180,13 @@ def using_textual_sql(session):
 
     # Link textual SQL to ORM-mapped column expressions
     stmt = sql.text("SELECT name, id, fullname, nickname "
-                    "FROM user WHERE name=:name")
+                    "FROM users WHERE name=:name")
     stmt = stmt.columns(User.name, User.id, User.fullname, User.nickname)
     users = session.query(User).from_statement(stmt).params(name='ed').all()
     print('users =', users)
 
     # Specify the columns from query
-    stmt = sql.text("SELECT name, id FROM user WHERE name=:name")
+    stmt = sql.text("SELECT name, id FROM users WHERE name=:name")
     stmt = stmt.columns(User.name, User.id)
     users = session.query(User.id, User.name)\
                    .from_statement(stmt)\
