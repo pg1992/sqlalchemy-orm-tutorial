@@ -14,6 +14,9 @@ class Address(Base):
 
     user = sql.orm.relationship('User', back_populates='addresses')
 
+    def __repr__(self):
+        return "Address(email_address='%s')" % self.email_address
+
 
 class User(Base):
     __tablename__ = 'users'
