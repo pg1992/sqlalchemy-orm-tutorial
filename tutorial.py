@@ -228,6 +228,12 @@ def counting_examples(session):
     print('There are {} users'.format(total))
 
 
+def working_with_related_objects(session):
+    # Create a new user with blank addresses collection
+    jack = User(name='jack', fullname='Jack Bean', nickname='gjffdd')
+    print('jack.addresses =', jack.addresses)
+
+
 def main():
     # Check SQLAlchemy version
     print('SQLAlchemy version: {}'.format(sql.__version__))
@@ -317,6 +323,9 @@ def main():
 
         # Counting examples
         counting_examples(session)
+
+        # Working with related objects
+        working_with_related_objects(session)
 
 
 if __name__ == '__main__':
