@@ -264,6 +264,15 @@ def querying_with_joins(session):
         print('user =', u)
         print('address =', a)
 
+    # Use actual SQL JOIN
+    #   This works because there is only one foreign key
+    #   between them.
+    result = session.query(User)\
+                    .join(Address)\
+                    .filter(Address.email_address == 'jack@google.com')\
+                    .all()
+    print('result with actual SQL JOIN = ', result)
+
 
 def main():
     # Check SQLAlchemy version
