@@ -249,6 +249,11 @@ def working_with_related_objects(session):
     session.add(jack)
     session.commit()
 
+    # Query a user and its associated addresses
+    jack = session.query(User).filter_by(name='jack').one()
+    print('jack =', jack)
+    print('jack.addresses =', jack.addresses)
+
 
 def main():
     # Check SQLAlchemy version
