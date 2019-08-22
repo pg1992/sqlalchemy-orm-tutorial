@@ -255,6 +255,16 @@ def working_with_related_objects(session):
     print('jack.addresses =', jack.addresses)
 
 
+def querying_with_joins(session):
+    # Use a simple implicit join
+    for u, a in session.query(User, Address)\
+                       .filter(User.id == Address.user_id)\
+                       .filter(Address.email_address == 'jack@google.com')\
+                       .all():
+        print('user =', u)
+        print('address =', a)
+
+
 def main():
     # Check SQLAlchemy version
     print('SQLAlchemy version: {}'.format(sql.__version__))
@@ -347,6 +357,9 @@ def main():
 
         # Working with related objects
         working_with_related_objects(session)
+
+        # Querying with joins
+        querying_with_joins(session)
 
 
 if __name__ == '__main__':
