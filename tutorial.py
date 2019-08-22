@@ -245,6 +245,10 @@ def working_with_related_objects(session):
     print('jack.addresses[1].user =', jack.addresses[1].user)
     print('jack.addresses[1].user is jack? ', jack.addresses[1].user is jack)
 
+    # Persist the new user and all its related addresses
+    session.add(jack)
+    session.commit()
+
 
 def main():
     # Check SQLAlchemy version
