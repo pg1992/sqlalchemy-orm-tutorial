@@ -302,6 +302,18 @@ def querying_with_joins(session):
     result = session.query(User).outerjoin(User.addresses).all()
     print('result =', result)
 
+    # Use aliases to query the same table more than once
+    adalias1 = sql.orm.aliased(Address)
+    adalias2 = sql.orm.aliased(Address)
+    for username, email1, email2 in \
+        session.query(User.name, adalias1.email_address,
+                      adalias2.email_address)\
+               .join(adalias1, User.addresses)\
+               .join(adalias2, User.addresses)\
+               .filter(adalias1.email_address == 'jack@google.com')\
+               .filter(adalias2.email_address == 'j25@yahoo.com'):
+        print(username, email1, email2)
+
 
 def main():
     # Check SQLAlchemy version
