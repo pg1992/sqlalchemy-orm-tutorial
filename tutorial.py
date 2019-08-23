@@ -345,6 +345,11 @@ def querying_with_joins(session):
     for name, in session.query(User.name).filter(stmt):
         print('user {} has associated emails'.format(name))
 
+    # Use Query.any() to check if there are any addresses
+    for name, in session.query(User.name)\
+                        .filter(User.addresses.any()):
+        print('user {} has associated emails'.format(name))
+
 
 def main():
     # Check SQLAlchemy version
