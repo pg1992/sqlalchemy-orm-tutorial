@@ -273,6 +273,31 @@ def querying_with_joins(session):
                     .all()
     print('result with actual SQL JOIN = ', result)
 
+    # When no foreign keys exist
+    #   explicit condition
+    result = session.query(User)\
+                    .join(Address, User.id == Address.user_id)\
+                    .all()
+    print('result with explict condition =', result)
+
+    #   specify relationship from left to right
+    result = session.query(User)\
+                    .join(User.addresses)\
+                    .all()
+    print('result specifying relationship from left to right =', result)
+
+    #   same, with explicti target
+    result = session.query(User)\
+                    .join(Address, User.addresses)\
+                    .all()
+    print('same result with explicit target =', result)
+
+    #   same, using a string
+    result = session.query(User)\
+                    .join('addresses')\
+                    .all()
+    print('same result using string =', result)
+
 
 def main():
     # Check SQLAlchemy version
