@@ -350,6 +350,18 @@ def querying_with_joins(session):
                         .filter(User.addresses.any()):
         print('user {} has associated emails'.format(name))
 
+    # User Query.any() with a criterion to limit the rows matched
+    for match in ['google', 'yahoo']:
+        print('users with {} in their email:'.format(match))
+        match_str = '%{}%'.format(match)
+        for name, in session.query(User.name)\
+                            .filter(
+                                User.addresses.any(
+                                    Address.email_address.like(match_str)
+                                )
+                            ):
+            print('  {}'.format(name))
+
 
 def main():
     # Check SQLAlchemy version
