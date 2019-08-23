@@ -362,6 +362,13 @@ def querying_with_joins(session):
                             ):
             print('  {}'.format(name))
 
+    # Use has() (which is the same operator as any())
+    for name, in session.query(User.name):
+        print('emails not from {}:'.format(name))
+        for address in session.query(Address)\
+                              .filter(~Address.user.has(User.name == name)):
+            print('  {}'.format(address.email_address))
+
 
 def main():
     # Check SQLAlchemy version
