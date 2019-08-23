@@ -339,6 +339,12 @@ def querying_with_joins(session):
                                 .join(adalias, User.addresses):
         print('Users{}{}'.format(user, address))
 
+    # List the name of users that have any email addresses
+    from sqlalchemy.sql import exists
+    stmt = exists().where(Address.user_id == User.id)
+    for name, in session.query(User.name).filter(stmt):
+        print('user {} has associated emails'.format(name))
+
 
 def main():
     # Check SQLAlchemy version
