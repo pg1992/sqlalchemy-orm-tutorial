@@ -362,6 +362,7 @@ def main():
 
         # Create an instance of the mapped class
         ed_user = User(name='ed', fullname='Ed Jones', nickname='edsnickname')
+        ed_user.addresses = [Address(email_address='ed@google.com')]
         print('ed_user =', ed_user)
 
         # Create a pending instance
