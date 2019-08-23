@@ -314,6 +314,22 @@ def querying_with_joins(session):
                .filter(adalias2.email_address == 'j25@yahoo.com'):
         print(username, email1, email2)
 
+    # Use subqueries
+    #
+    # SELECT users.*, adr_count.address_count FROM users LEFT OUTER JOIN
+    #        (SELECT user_id, count(*) AS address_count
+    #           FROM addresses GROUP_BY user_id) as adr_count
+    #     ON users.id=adr_count.user_id
+    from sqlalchemy.sql import func
+    stmt = session.query(Address.user_id,
+                         func.count('*').label('address_count'))\
+                  .group_by(Address.user_id)\
+                  .subquery()
+    for u, count in session.query(User, stmt.c.address_count)\
+                           .outerjoin(stmt, User.id == stmt.c.user_id)\
+                           .order_by(User.id):
+        print('User {} has {} emails'.format(u, count))
+
 
 def main():
     # Check SQLAlchemy version
