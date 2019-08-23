@@ -298,6 +298,10 @@ def querying_with_joins(session):
                     .all()
     print('same result using string =', result)
 
+    # LEFT OUTER JOIN
+    result = session.query(User).outerjoin(User.addresses).all()
+    print('result =', result)
+
 
 def main():
     # Check SQLAlchemy version
