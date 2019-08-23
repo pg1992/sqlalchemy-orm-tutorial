@@ -330,6 +330,15 @@ def querying_with_joins(session):
                            .order_by(User.id):
         print('User {} has {} emails'.format(u, count))
 
+    # Associante an "alias" of a mapped class to a subquery
+    stmt = session.query(Address)\
+                  .filter(Address.email_address != 'j25@yahoo.com')\
+                  .subquery()
+    adalias = sql.orm.aliased(Address, stmt)
+    for user, address in session.query(User, adalias)\
+                                .join(adalias, User.addresses):
+        print('Users{}{}'.format(user, address))
+
 
 def main():
     # Check SQLAlchemy version
