@@ -483,6 +483,9 @@ def many_to_many(session):
                          .all()
     print('all the first posts: {}'.format(first_posts))
 
+    # we can also see all of wendy's posts
+    print("Wendy's posts: {}".format(wendy.posts.all()))
+
 
 def main():
     # Check SQLAlchemy version
