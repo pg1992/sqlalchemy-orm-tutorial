@@ -477,6 +477,12 @@ def many_to_many(session):
     post.keywords.append(Keyword('wendy'))
     post.keywords.append(Keyword('firstpost'))
 
+    # query posts with the 'firstpost' keyword
+    first_posts = session.query(BlogPost)\
+                         .filter(BlogPost.keywords.any(keyword='firstpost'))\
+                         .all()
+    print('all the first posts: {}'.format(first_posts))
+
 
 def main():
     # Check SQLAlchemy version
