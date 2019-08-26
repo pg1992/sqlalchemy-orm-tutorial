@@ -461,6 +461,23 @@ def eager_loading(session):
     print('user {} has emails {}'.format(jack.name, jacks_addresses))
 
 
+def deletion(session):
+    # delete a user
+    jack = session.query(User).filter_by(name='jack').one()
+    session.delete(jack)
+    total = session.query(User).filter_by(name='jack').count()
+    print('there are {} with name jack after session.delete'.format(total))
+
+    # the deletion is not cascaded because we didn't set it up
+    total_emails = session.query(Address).filter(
+        Address.email_address.in_(['jack@google.com', 'j25@yahoo.com'])
+    ).count()
+    print('there are {} orphan emails'.format(total_emails))
+
+    # Oh no! There are orphan emails. Rollback!
+    session.rollback()
+
+
 def main():
     # Check SQLAlchemy version
     print('SQLAlchemy version: {}'.format(sql.__version__))
@@ -563,6 +580,9 @@ def main():
 
         # Reduce the number of queries by applying eager loading
         eager_loading(session)
+
+        # Deleting
+        deletion(session)
 
 
 if __name__ == '__main__':
