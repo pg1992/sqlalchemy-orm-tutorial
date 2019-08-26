@@ -473,6 +473,10 @@ def many_to_many(session):
     session.add(post)
     print("wendy's first post: {}".format(post))
 
+    # create a few keywords
+    post.keywords.append(Keyword('wendy'))
+    post.keywords.append(Keyword('firstpost'))
+
 
 def main():
     # Check SQLAlchemy version
