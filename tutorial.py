@@ -427,6 +427,13 @@ def common_relationship_operators(session):
                          .filter(Address.user.has(name='jack')):
         print('  {}'.format(email))
 
+    # use Query.with_parent() for any relationship
+    print('all emails from jack:')
+    jack = session.query(User).filter_by(name='jack').one()
+    for email, in session.query(Address.email_address)\
+                         .with_parent(jack, 'addresses'):
+        print('  {}'.format(email))
+
 
 def main():
     # Check SQLAlchemy version
