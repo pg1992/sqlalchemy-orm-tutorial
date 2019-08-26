@@ -477,6 +477,16 @@ def deletion(session):
     # Oh no! There are orphan emails. Rollback!
     session.rollback()
 
+    # load Jack by primary key
+    jack = session.query(User).get(5)
+    # remove one Address (lazy load fires off)
+    del jack.addresses[1]
+    # only one address remains
+    total_emails = session.query(Address).filter(
+        Address.email_address.in_(['jack@google.com', 'j25@yahoo.com'])
+    ).count()
+    print('jack has {} emails'.format(total_emails))
+
 
 def main():
     # Check SQLAlchemy version
