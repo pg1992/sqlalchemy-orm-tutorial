@@ -26,8 +26,8 @@ class User(Base):
     fullname = sql.Column(sql.String)
     nickname = sql.Column(sql.String)
 
-    addresses = sql.orm.relationship('Address', order_by=Address.id,
-                                     back_populates='user')
+    addresses = sql.orm.relationship('Address', back_populates='user',
+                                     cascade='all, delete, delete-orphan')
 
     def __repr__(self):
         return "<User(name='%s', fullname='%s', nickname='%s')>" % (
