@@ -370,6 +370,14 @@ def querying_with_joins(session):
             print('  {}'.format(address.email_address))
 
 
+def common_relationship_operators(session):
+    # many-to-one equals comparison
+    for user in session.query(User).filter(User.name.like('%ed%')).all():
+        print('user {} has the following emails:'.format(user.name))
+        for addr in session.query(Address).filter(Address.user == user).all():
+            print('  {}'.format(addr.email_address))
+
+
 def main():
     # Check SQLAlchemy version
     print('SQLAlchemy version: {}'.format(sql.__version__))
@@ -466,6 +474,9 @@ def main():
 
         # Querying with joins
         querying_with_joins(session)
+
+        # All the operators which build on relationships
+        common_relationship_operators(session)
 
 
 if __name__ == '__main__':
