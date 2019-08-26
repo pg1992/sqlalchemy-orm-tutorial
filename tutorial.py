@@ -403,6 +403,16 @@ def common_relationship_operators(session):
         except Exception as ex:
             print('Unknown error: {}'.format(ex))
 
+    # use any() for collections
+    print('users with google emails:')
+    for name, in session.query(User.name)\
+                        .filter(
+                             User.addresses.any(
+                                 Address.email_address.like('%google.com')
+                             )
+                         ):
+        print('  {}'.format(name))
+
 
 def main():
     # Check SQLAlchemy version
