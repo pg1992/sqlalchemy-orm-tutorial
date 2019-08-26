@@ -382,6 +382,13 @@ def common_relationship_operators(session):
         for addr in session.query(Address).filter(Address.user != user).all():
             print('  {}'.format(addr.email_address))
 
+    # IS NULL
+    #   pycodestyle says it is an error to compare with None, but there
+    #   is no sqlalchemy.orm.relation.is_ method like the sqlalchemy.Column.
+    print('All email addresses with no associated user:')
+    for addr in session.query(Address).filter(Address.user == None).all():
+        print('  {}'.format(addr.email_address))
+
 
 def main():
     # Check SQLAlchemy version
