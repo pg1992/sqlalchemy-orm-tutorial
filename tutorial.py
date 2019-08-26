@@ -1,5 +1,5 @@
 import sqlalchemy as sql
-from models import Base, Address, User
+from models import Base, Address, User, BlogPost, Keyword
 
 
 def create_engines_and_sessions():
@@ -464,6 +464,16 @@ def deletion(session):
           'emails associated with it'.format(total_users, total_emails))
 
 
+def many_to_many(session):
+    # give Wendy some blog posts
+    wendy = session.query(User)\
+                   .filter_by(name='wendy')\
+                   .one()
+    post = BlogPost("Wendy's Blog Post", "This is a test", wendy)
+    session.add(post)
+    print("wendy's first post: {}".format(post))
+
+
 def main():
     # Check SQLAlchemy version
     print('SQLAlchemy version: {}'.format(sql.__version__))
@@ -569,6 +579,11 @@ def main():
 
         # Deleting
         deletion(session)
+
+        # Building a Many to Many Relationship
+        many_to_many(session)
+
+        session.commit()
 
 
 if __name__ == '__main__':
