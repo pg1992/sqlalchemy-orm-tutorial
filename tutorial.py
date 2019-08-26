@@ -413,6 +413,14 @@ def common_relationship_operators(session):
                          ):
         print('  {}'.format(name))
 
+    # use any() with keyword argument
+    print('user with email ed@google.com')
+    for name, in session.query(User.name)\
+                        .filter(
+                            User.addresses.any(email_address='ed@google.com')
+                        ):
+        print('  {}'.format(name))
+
 
 def main():
     # Check SQLAlchemy version
