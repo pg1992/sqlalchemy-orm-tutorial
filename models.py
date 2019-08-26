@@ -29,6 +29,9 @@ class User(Base):
     addresses = sql.orm.relationship('Address', back_populates='user',
                                      cascade='all, delete, delete-orphan')
 
+    posts = sql.orm.relationship('BlogPost', back_populates='author',
+                                 lazy='dynamic')
+
     def __repr__(self):
         return "<User(name='%s', fullname='%s', nickname='%s')>" % (
             self.name, self.fullname, self.nickname,
@@ -50,6 +53,8 @@ class BlogPost(Base):
     user_id = sql.Column(sql.Integer, sql.ForeignKey('users.id'))
     headline = sql.Column(sql.String(255), nullable=False)
     body = sql.Column(sql.Text)
+
+    author = sql.orm.relationship('User', back_populates='posts')
 
     # many-to-many BlogPost<->Keyword
     keywords = sql.orm.relationship('Keyword',
