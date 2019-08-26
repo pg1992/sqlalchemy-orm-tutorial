@@ -435,6 +435,15 @@ def common_relationship_operators(session):
         print('  {}'.format(email))
 
 
+def eager_loading(session):
+    # load User.addresses eagerly with selectinload
+    jack = session.query(User)\
+                  .options(sql.orm.selectinload(User.addresses))\
+                  .filter_by(name='jack')\
+                  .one()
+    print('user {} has emails {}'.format(jack.name, jack.addresses))
+
+
 def main():
     # Check SQLAlchemy version
     print('SQLAlchemy version: {}'.format(sql.__version__))
@@ -534,6 +543,9 @@ def main():
 
         # All the operators which build on relationships
         common_relationship_operators(session)
+
+        # Reduce the number of queries by applying eager loading
+        eager_loading(session)
 
 
 if __name__ == '__main__':
