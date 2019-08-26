@@ -421,6 +421,12 @@ def common_relationship_operators(session):
                         ):
         print('  {}'.format(name))
 
+    # use has() for scalar references
+    print('all emails from jack')
+    for email, in session.query(Address.email_address)\
+                         .filter(Address.user.has(name='jack')):
+        print('  {}'.format(email))
+
 
 def main():
     # Check SQLAlchemy version
