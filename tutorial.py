@@ -450,6 +450,16 @@ def eager_loading(session):
                   .one()
     print('user {} has emails {}'.format(jack.name, jack.addresses))
 
+    # load Address row and related User object, filter on the User named "jack"
+    # use contains_eager() to apply "user" columns to the Address.user
+    jacks_addresses = session.query(Address)\
+                             .join(Address.user)\
+                             .filter(User.name == 'jack')\
+                             .options(sql.orm.contains_eager(Address.user))\
+                             .all()
+    jack = jacks_addresses[0].user
+    print('user {} has emails {}'.format(jack.name, jacks_addresses))
+
 
 def main():
     # Check SQLAlchemy version
