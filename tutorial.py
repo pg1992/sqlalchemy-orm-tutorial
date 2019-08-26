@@ -389,6 +389,20 @@ def common_relationship_operators(session):
     for addr in session.query(Address).filter(Address.user == None).all():
         print('  {}'.format(addr.email_address))
 
+    # contains() is used for one-to-many relationships
+    for email in session.query(Address):
+        try:
+            user = session.query(User)\
+                          .filter(User.addresses.contains(email))\
+                          .one()
+            print('user %s owns email %s' % (user.name, email.email_address))
+        except sql.orm.exc.MultipleResultsFound as ex:
+            print('There were more than one user that owns this email')
+        except sql.orm.exc.NoResultFound as ex:
+            print('There is no user that owns this email')
+        except Exception as ex:
+            print('Unknown error: {}'.format(ex))
+
 
 def main():
     # Check SQLAlchemy version
