@@ -371,10 +371,15 @@ def querying_with_joins(session):
 
 
 def common_relationship_operators(session):
-    # many-to-one equals comparison
     for user in session.query(User).filter(User.name.like('%ed%')).all():
+        # many-to-one equals comparison
         print('user {} has the following emails:'.format(user.name))
         for addr in session.query(Address).filter(Address.user == user).all():
+            print('  {}'.format(addr.email_address))
+
+        # many-to-one not equals comparison
+        print('user {} does not have the following emails:'.format(user.name))
+        for addr in session.query(Address).filter(Address.user != user).all():
             print('  {}'.format(addr.email_address))
 
 
