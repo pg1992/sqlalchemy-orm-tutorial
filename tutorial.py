@@ -443,6 +443,13 @@ def eager_loading(session):
                   .one()
     print('user {} has emails {}'.format(jack.name, jack.addresses))
 
+    # eager load User.addresses with joinedload (LEFT OUTER JOIN)
+    jack = session.query(User)\
+                  .options(sql.orm.joinedload(User.addresses))\
+                  .filter_by(name='jack')\
+                  .one()
+    print('user {} has emails {}'.format(jack.name, jack.addresses))
+
 
 def main():
     # Check SQLAlchemy version
