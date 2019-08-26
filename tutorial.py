@@ -487,6 +487,15 @@ def deletion(session):
     ).count()
     print('jack has {} emails'.format(total_emails))
 
+    # cascade delete jack's emails
+    session.delete(jack)
+    total_users = session.query(User).filter_by(name='jack').count()
+    total_emails = session.query(Address).filter(
+        Address.email_address.in_(['jack@google.com', 'j25@yahoo.com'])
+    ).count()
+    print('there are {} users named jack and {} '
+          'emails associated with it'.format(total_users, total_emails))
+
 
 def main():
     # Check SQLAlchemy version
